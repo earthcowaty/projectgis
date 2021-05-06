@@ -1,0 +1,599 @@
+<html>
+
+</html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>ArcGIS API</title>
+    <style>
+        html,
+        body,
+        #viewDiv {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"
+        integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js"
+        integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.19/"></script>
+
+    <script>
+
+
+        function select(that) {
+
+            if (that.value == "5A") {
+                document.getElementById("5A").style.display = "block";
+            } else {
+                document.getElementById("5A").style.display = "none";
+            }
+
+            if (that.value == "5B") {
+                document.getElementById("5B").style.display = "block";
+            } else {
+                document.getElementById("5B").style.display = "none";
+            }
+
+            if (that.value == "5C") {
+                document.getElementById("5C").style.display = "block";
+            } else {
+                document.getElementById("5C").style.display = "none";
+            }
+
+            if (that.value == "5D") {
+                document.getElementById("5D").style.display = "block";
+            } else {
+                document.getElementById("5D").style.display = "none";
+            }
+
+            if (that.value == "5E") {
+                document.getElementById("5E").style.display = "block";
+            } else {
+                document.getElementById("5E").style.display = "none";
+            }
+
+            if (that.value == "5F") {
+                document.getElementById("5F").style.display = "block";
+            } else {
+                document.getElementById("5F").style.display = "none";
+            }
+
+        }
+
+        // -------visualize-------
+
+        // 5A visualize
+        function yearpicker5A() {
+            const year = document.getElementById("year").value
+
+            require([
+                "esri/config",
+                "esri/Map",
+                "esri/views/MapView",
+
+                "esri/Graphic",
+                "esri/layers/GraphicsLayer"
+
+            ], function (esriConfig, Map, MapView, Graphic, GraphicsLayer) {
+
+                esriConfig.apiKey = "AAPK39300da79df044a186a524f48a37cf17m5TqTxhFs5Hc-DnKfb8gbJZwbZw8j2gZka8lI3sW7Lo8wI6Nv4jMM3ilixkFAIbx";
+
+                const map = new Map({
+                    basemap: "arcgis-topographic" //Basemap layer service
+                });
+
+                const view = new MapView({
+                    map: map,
+                    center: [-118.80500, 34.02700], //Longitude, latitude
+                    zoom: 13,
+                    container: "viewDiv"
+                });
+
+                const graphicsLayer = new GraphicsLayer();
+                map.add(graphicsLayer);
+
+                function plotPoint(lat, long) {
+
+                    const point = { //Create a point
+                        type: "point",
+                        longitude: long,
+                        latitude: lat
+                    };
+                    const simpleMarkerSymbol = {
+                        type: "simple-marker",
+                        color: [226, 119, 40],  // Orange
+                        outline: {
+                            color: [255, 255, 255], // White
+                            width: 1
+                        }
+                    };
+
+                    const pointGraphic = new Graphic({
+                        geometry: point,
+                        symbol: simpleMarkerSymbol
+                    });
+                    graphicsLayer.add(pointGraphic);
+                }
+
+                fetch('/5A?year=' + year)
+                    .then(response => response.json())
+                    .then(data => {
+                        for (item of data["latnlong"]) {
+                            plotPoint(item[0], item[1]);
+                        }
+                    })
+                    .catch(err => { alert(err) });
+
+            });
+        }
+
+        // 5B visulize
+        function bangkok5B() {
+            const getData = async () => {
+                await fetch('/5B')
+                    .then(response => response.json())
+                    .then(data => {
+                        require([
+                            "esri/config",
+                            "esri/Map",
+                            "esri/views/MapView",
+
+                            "esri/Graphic",
+                            "esri/layers/GraphicsLayer"
+
+                        ],
+                            function (esriConfig, Map, MapView, Graphic, GraphicsLayer) {
+
+                                esriConfig.apiKey = "AAPK39300da79df044a186a524f48a37cf17m5TqTxhFs5Hc-DnKfb8gbJZwbZw8j2gZka8lI3sW7Lo8wI6Nv4jMM3ilixkFAIbx";
+
+                                const map = new Map({
+                                    basemap: "arcgis-topographic" //Basemap layer service
+                                });
+
+                                const view = new MapView({
+                                    map: map,
+                                    center: [-118.80500, 34.02700], //Longitude, latitude
+                                    zoom: 1,
+                                    container: "viewDiv"
+                                });
+
+                                const graphicsLayer = new GraphicsLayer();
+                                map.add(graphicsLayer);
+
+                                function plotPolygon(lat1, long1, lat2 , long2) {
+
+                                    const polygon = { //Create a point
+                                        type: "polygon",
+                                        rings:[
+                                            [lat1,long1],
+                                            [lat2,long2]
+                                        ]
+                                    };
+                                    const simpleMarkerSymbol = {
+                                        type: "simple-marker",
+                                        color: [226, 119, 40],  // Orange
+                                        outline: {
+                                            color: [255, 255, 255], // White
+                                            width: 1
+                                        }
+                                    };
+
+                                    const pointGraphic = new Graphic({
+                                        geometry: point,
+                                        symbol: simpleMarkerSymbol
+                                    });
+                                    graphicsLayer.add(pointGraphic);
+                                }
+
+
+                                for (item of data["latnlong"]) {
+                                    plotPoint(item[0], item[1]);
+                                }
+
+                            });
+                    })
+                    .catch(err => { alert(err) });
+
+            }
+            getData()
+        }
+
+        // 5C visulize
+        function neighbor5C() {
+            require([
+                "esri/config",
+                "esri/Map",
+                "esri/views/MapView",
+
+                "esri/Graphic",
+                "esri/layers/GraphicsLayer"
+
+            ], function (esriConfig, Map, MapView, Graphic, GraphicsLayer) {
+
+                esriConfig.apiKey = "AAPK39300da79df044a186a524f48a37cf17m5TqTxhFs5Hc-DnKfb8gbJZwbZw8j2gZka8lI3sW7Lo8wI6Nv4jMM3ilixkFAIbx";
+
+                const map = new Map({
+                    basemap: "arcgis-topographic" //Basemap layer service
+                });
+
+                const view = new MapView({
+                    map: map,
+                    center: [-118.80500, 34.02700], //Longitude, latitude
+                    zoom: 13,
+                    container: "viewDiv"
+                });
+
+                const graphicsLayer = new GraphicsLayer();
+                map.add(graphicsLayer);
+
+                function plotPoint(long, lat) {
+
+                    const point = { //Create a point
+                        type: "point",
+                        longitude: long,
+                        latitude: lat
+                    };
+                    const simpleMarkerSymbol = {
+                        type: "simple-marker",
+                        color: [226, 119, 40],  // Orange
+                        outline: {
+                            color: [255, 255, 255], // White
+                            width: 1
+                        }
+                    };
+
+                    const pointGraphic = new Graphic({
+                        geometry: point,
+                        symbol: simpleMarkerSymbol
+                    });
+                    graphicsLayer.add(pointGraphic);
+                }
+
+                fetch('/5C')
+                    .then(response => response.json())
+                    .then(data => {
+                        for (item of data["latnlong"]) {
+                            plotPoint(item[0], item[1]);
+                        }
+                    })
+                    .catch(err => { alert(err) });
+
+            });
+        }
+
+        // 5D visulize
+        function mbr5D() {
+            require([
+                "esri/config",
+                "esri/Map",
+                "esri/views/MapView",
+
+                "esri/Graphic",
+                "esri/layers/GraphicsLayer"
+
+            ], function (esriConfig, Map, MapView, Graphic, GraphicsLayer) {
+
+                esriConfig.apiKey = "AAPK39300da79df044a186a524f48a37cf17m5TqTxhFs5Hc-DnKfb8gbJZwbZw8j2gZka8lI3sW7Lo8wI6Nv4jMM3ilixkFAIbx";
+
+                const map = new Map({
+                    basemap: "arcgis-topographic" //Basemap layer service
+                });
+
+                const view = new MapView({
+                    map: map,
+                    center: [-118.80500, 34.02700], //Longitude, latitude
+                    zoom: 13,
+                    container: "viewDiv"
+                });
+
+                const graphicsLayer = new GraphicsLayer();
+                map.add(graphicsLayer);
+
+                function plotPoint(long, lat) {
+
+                    const point = { //Create a point
+                        type: "point",
+                        longitude: long,
+                        latitude: lat
+                    };
+                    const simpleMarkerSymbol = {
+                        type: "simple-marker",
+                        color: [226, 119, 40],  // Orange
+                        outline: {
+                            color: [255, 255, 255], // White
+                            width: 1
+                        }
+                    };
+
+                    const pointGraphic = new Graphic({
+                        geometry: point,
+                        symbol: simpleMarkerSymbol
+                    });
+                    graphicsLayer.add(pointGraphic);
+                }
+
+                fetch('/5D')
+                    .then(response => response.json())
+                    .then(data => {
+                        for (item of data["latnlong"]) {
+                            plotPoint(item[0], item[1]);
+                        }
+                    })
+                    .catch(err => { alert(err) });
+
+            });
+        }
+
+        // 5E visualize
+        function highest5E() {
+            require([
+                "esri/config",
+                "esri/Map",
+                "esri/views/MapView",
+
+                "esri/Graphic",
+                "esri/layers/GraphicsLayer"
+
+            ], function (esriConfig, Map, MapView, Graphic, GraphicsLayer) {
+
+                esriConfig.apiKey = "AAPK39300da79df044a186a524f48a37cf17m5TqTxhFs5Hc-DnKfb8gbJZwbZw8j2gZka8lI3sW7Lo8wI6Nv4jMM3ilixkFAIbx";
+
+                const map = new Map({
+                    basemap: "arcgis-topographic" //Basemap layer service
+                });
+
+                const view = new MapView({
+                    map: map,
+                    center: [-118.80500, 34.02700], //Longitude, latitude
+                    zoom: 13,
+                    container: "viewDiv"
+                });
+
+                const graphicsLayer = new GraphicsLayer();
+                map.add(graphicsLayer);
+
+                function plotPoint(lat, long) {
+
+                    const point = { //Create a point
+                        type: "point",
+                        longitude: long,
+                        latitude: lat
+                    };
+                    const simpleMarkerSymbol = {
+                        type: "simple-marker",
+                        color: [226, 119, 40],  // Orange
+                        outline: {
+                            color: [255, 255, 255], // White
+                            width: 1
+                        }
+                    };
+
+                    const pointGraphic = new Graphic({
+                        geometry: point,
+                        symbol: simpleMarkerSymbol
+                    });
+                    graphicsLayer.add(pointGraphic);
+                }
+
+                fetch('/5E')
+                    .then(response => response.json())
+                    .then(data => {
+                        for (item of data["latnlong"]) {
+                            plotPoint(item[0], item[1]);
+                        }
+                    })
+                    .catch(err => { alert(err) });
+
+            });
+        }
+
+        // 5F visualize
+        function lowin5F() {
+            const yearin = document.getElementById("yearin").value
+
+            require([
+                "esri/config",
+                "esri/Map",
+                "esri/views/MapView",
+
+                "esri/Graphic",
+                "esri/layers/GraphicsLayer"
+
+            ], function (esriConfig, Map, MapView, Graphic, GraphicsLayer) {
+
+                esriConfig.apiKey = "AAPK39300da79df044a186a524f48a37cf17m5TqTxhFs5Hc-DnKfb8gbJZwbZw8j2gZka8lI3sW7Lo8wI6Nv4jMM3ilixkFAIbx";
+
+                const map = new Map({
+                    basemap: "arcgis-topographic" //Basemap layer service
+                });
+
+                const view = new MapView({
+                    map: map,
+                    center: [-118.80500, 34.02700], //Longitude, latitude
+                    zoom: 1,
+                    container: "viewDiv"
+                });
+
+                const graphicsLayer = new GraphicsLayer();
+                map.add(graphicsLayer);
+
+                function plotPoint(lat, long) {
+
+                    const point = { //Create a point
+                        type: "point",
+                        longitude: long,
+                        latitude: lat
+                    };
+                    const simpleMarkerSymbol = {
+                        type: "simple-marker",
+                        color: [226, 51, 255],  // Pink
+                        outline: {
+                            color: [255, 255, 255], // White
+                            width: 1
+                        }
+                    };
+
+                    const pointGraphic = new Graphic({
+                        geometry: point,
+                        symbol: simpleMarkerSymbol
+                    });
+                    graphicsLayer.add(pointGraphic);
+                }
+
+                fetch('/5F?yearin=' + yearin)
+                    .then(response => response.json())
+                    .then(data => {
+                        for (item of data["latnlong"]) {
+                            plotPoint(item[0], item[1]);
+                        }
+                    })
+                    .catch(err => { alert(err) });
+
+            });
+        }
+    </script>
+
+</head>
+
+<body style="background-color:rgba(197, 191, 191, 0.973);">
+    {% load static %}
+    <!-- Font Awesome icons (free version)-->
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand js-scroll-trigger" href="/">Pollution PM2.5</a>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+                aria-label="Toggle navigation">
+                Menu
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/insert">Insert</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="">Search</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/5">Visualizing</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header class="masthead">
+        <div class="container d-flex h-100 align-items-center">
+            <div class="mx-auto text-center">
+
+                {% csrf_token %}
+                <div class="container">
+                    </br>
+                    <!-- <input type="number" name="year" id="year">
+        <input type="submit" class="btn btn-outline-primary" value="Search" onclick="yearpicker()"> -->
+
+                    <select class="btn btn-dark " onchange="select(this); ">
+                        <option value="">SELECT FUNCTION</option>
+                        <option value="5A">5A</option>
+                        <option value="5B">5B</option>
+                        <option value="5C">5C</option>
+                        <option value="5D">5D</option>
+                        <option value="5E">5E</option>
+                        <option value="5F">5F</option>
+                    </select>
+
+                    <!-- 5A -->
+                    <div id="5A" style="display: none;"></br>
+                        <label for="5A">
+                            <h3>
+                                <p style="color:rgb(255, 255, 255)">Input 'year' to visualize all the city points of all
+                                    countries.
+                                </p>
+                            </h3>
+                        </label></br>
+                        <input type="number" name="year" id="year">
+                        <input type="submit" class="btn btn-success" value="Visualize" onclick="yearpicker5A()">
+                    </div>
+
+                    <!-- 5B -->
+                    <div id="5B" style="display: none;"></br>
+                        <label for="bangkok">
+                            <h3>
+                                <p style="color:rgb(255, 255, 255)">Visualize the 50 closest city points to Bangkok.</p>
+                            </h3>
+                        </label> </br>
+                        <input type="submit" class="btn btn-success" value="Visualize" onclick="bangkok5B()">
+                    </div>
+
+                    <!-- 5C -->
+                    <div id="5C" style="display: none;"></br>
+                        <label for="bangkok">
+                            <h3>
+                                <p style="color:rgb(255, 255, 255)">Visualize all the city points of Thailand’s
+                                    neighboring
+                                    countries in 2018.</p>
+                            </h3>
+                        </label>
+                        </br>
+                        <input type="submit" class="btn btn-success" value="Visualize" onclick="neighbor5C()">
+                    </div>
+
+                    <!-- 5D -->
+                    <div id="5D" style="display: none;"></br>
+                        <label for="bangkok">
+                            <h3>
+                                <p style="color:rgb(255, 255, 255)">Visualize the four points of MBR covering all city
+                                    points in
+                                    Thailand in 2009.</p>
+                            </h3>
+                        </label>
+                        </br>
+                        <input type="text" id="bangkok" name="bangkok" />
+                        <input type="submit" class="btn btn-success" value="Visualize" onclick="mbr5D()">
+                    </div>
+
+                    <!-- 5E -->
+                    <div id="5E" style="display: none;"></br>
+                        <label for="5Elabel">
+                            <h3>
+                                <p style="color:rgb(255, 255, 255)">Visualize all city points of countries having the
+                                    highest
+                                    no. of city points in
+                                    2011.</p>
+                            </h3>
+                        </label> </br>
+                        <input type="submit" class="btn btn-success" value="Visualize" onclick="highest5E()">
+                    </div>
+
+                    <!-- 5F -->
+                    <div id="5F" style="display: none;"></br>
+                        <label for="bangkok">
+                            <h3>
+                                <p style="color:rgb(255, 255, 255)">Input 'year' to visualize all the city points which
+                                    are
+                                    considered as “low
+                                    income”</p>
+                            </h3>
+                        </label> </br>
+                        <input type="number" id="yearin" name="yearin" />
+                        <input type="submit" class="btn btn-success" value="Visualize" onclick="lowin5F()">
+                    </div>
+                </div>
+            </div>
+    </header>
+
+    <div id="viewDiv"></div>
+</body>
+
+</html>
